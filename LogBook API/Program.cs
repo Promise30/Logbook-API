@@ -16,6 +16,8 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Swashbuckle.AspNetCore.SwaggerGen;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 using System.Text;
 
@@ -33,6 +35,7 @@ builder.Services.AddSwaggerGen(c => {
         Description = "This is an API that allow students to keep track of their activities during their SIWES training.", 
         Version = "v1"
     });
+
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -142,15 +145,8 @@ using (var scope = app.Services.CreateScope())
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(u =>
-    {
-        u.RouteTemplate = "swagger/{documentName}/swagger.json";
-    });
-    app.UseSwaggerUI(c =>
-    {
-        c.RoutePrefix = "swagger";
-        c.SwaggerEndpoint(url: "/swagger/v1/swagger.json", name: "v1");
-    });
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 app.UseSerilogRequestLogging();
 app.UseHangfireDashboard();
@@ -159,4 +155,5 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
 

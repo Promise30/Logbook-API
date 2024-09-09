@@ -3,3 +3,44 @@
 ################################################################################
 
 /.env
+# Build artifacts
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS and Rider directories
+.vs/
+.idea/
+.vscode/
+
+# Configuration files containing secrets
+appsettings.Development.json
+secrets.json
+
+# Log files
+*.log
+logs/
+/Logs/
+
+# Docker-related files
+docker-compose.override.yml
+
+# Dependency directories (NuGet, wwwroot)
+packages/
+wwwroot/
+
+# Publish artifacts
+publish/
+node_modules/
+dist/
+
+# Other system files
+.DS_Store
+Thumbs.db
+/LogBook API/LogBook API.http

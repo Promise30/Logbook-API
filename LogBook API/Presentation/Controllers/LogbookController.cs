@@ -25,6 +25,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <response code="500">Returns an error message if an unexpected error occurs.</response>
         [Authorize(Roles ="Administrator")]
         [HttpGet("entries")]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status200OK)]  // For successful retrieval of entries
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status500InternalServerError)]  // For server errors
         public async Task<IActionResult> GetAllEntries()
@@ -40,6 +41,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <response code="500">Returns an error message if an unexpected error occurs.</response>
         [Authorize]
         [HttpGet]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetAllUserEntries()
@@ -58,6 +60,7 @@ namespace LogBook_API.Presentation.Controllers
         [Authorize] 
         [HttpGet]
         [Route("{entryId:guid}")]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<LogbookEntryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<string>),StatusCodes.Status500InternalServerError)]
@@ -73,6 +76,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <returns>Returns a created logbook entry if successful, or an error message if validation fails or an error occurs.</returns>
         [Authorize]
         [HttpPost]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<LogbookEntryDto>), StatusCodes.Status201Created)]  // For successful creation
         [ProducesResponseType(typeof(ApiResponse<ModelStateDictionary>), StatusCodes.Status400BadRequest)]  // For bad request (invalid payload)
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]  // For bad request 
@@ -96,6 +100,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <returns>The updated logbook entry if successful, or an error message if a failure occurs.</returns>
         [Authorize]
         [HttpPut]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<LogbookEntryDto>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status403Forbidden)]
         [ProducesResponseType(typeof(ApiResponse<ModelStateDictionary>), StatusCodes.Status400BadRequest)]
@@ -118,6 +123,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <returns>Returns no content if deletion is successful, or an error message if validation fails or an error occurs.</returns>
         [Authorize]
         [HttpDelete]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]  // For successful deletion with no content
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status400BadRequest)]  // For bad request (invalid entry ID)
         [ProducesResponseType(typeof(ApiResponse<string>), StatusCodes.Status403Forbidden)]  // For forbidden access (user not authorized to delete)
@@ -136,6 +142,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <returns>A list of successfully created entries, or a partial success message with details of any failed entries.</returns>
         [Authorize]
         [HttpPost("create-multiple-entries")]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ApiResponse<ModelStateDictionary>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status207MultiStatus)]
@@ -156,6 +163,7 @@ namespace LogBook_API.Presentation.Controllers
         /// <returns>A list of successfully updated entries, or a partial success message with details of any failed updates.</returns>
         [Authorize]
         [HttpPut("update-multiple-entries")]
+        [Produces("application/json")]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse<ModelStateDictionary>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status403Forbidden)]
@@ -178,6 +186,7 @@ namespace LogBook_API.Presentation.Controllers
         [Authorize]
         [Authorize]
         [HttpDelete("delete-multiple-entries")]
+        [Produces("application/json")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ApiResponse<ModelStateDictionary>), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ApiResponse<IEnumerable<LogbookEntryDto>>), StatusCodes.Status403Forbidden)]

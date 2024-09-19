@@ -1,0 +1,41 @@
+
+name: logbook_api_project
+        
+services:
+  logbookdb:
+    container_name: logbook_api_db
+    image: mcr.microsoft.com/mssql/server:latest
+    environment:
+        - ACCEPT_EULA=Y
+        - MSSQL_SA_PASSWORD=${MSSQL_SA_PASSWORD}
+    networks:
+        - logbook_backend   
+    volumes:
+        - mssql_data:/var/opt/mssql
+    ports:
+        - 8001:1433
+    
+  logbookapi:
+    container_name: logbook-api
+    image: ${DOCKER_REGISTRY-}logbookapi
+    pull_policy: always
+    build:
+      context: .
+      dockerfile: LogBook API/Dockerfile
+    networks:
+        - logbook_backend
+    environment:
+        - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
+        - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+    ports:
+        - 8002:8080
+        - 8003:8081
+    restart: on-failure
+    depends_on:
+        - logbookdb
+        
+networks:
+  logbook_backend:
+volumes: 
+  mssql_data:
+    

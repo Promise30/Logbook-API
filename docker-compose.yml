@@ -17,7 +17,7 @@ services:
     
   logbookapi:
     container_name: logbook-api
-    image: ${DOCKER_REGISTRY-}logbookapi
+    image: promisea/logbookapi:v1.0
     pull_policy: always
     build:
       context: .

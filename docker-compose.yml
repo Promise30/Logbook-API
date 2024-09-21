@@ -1,6 +1,4 @@
-
 name: logbook_api_project
-        
 services:
   logbookdb:
     container_name: logbook_api_db
@@ -27,6 +25,15 @@ services:
     environment:
         - ASPNETCORE_ENVIRONMENT=${ASPNETCORE_ENVIRONMENT}
         - ConnectionStrings__DefaultConnection=${CONNECTION_STRING}
+        - JwtSettings__validIssuer=${JWT_VALID_ISSUER}
+        - JwtSettings__validAudience=${JWT_VALID_AUDIENCE}
+        - JwtSettings__secretKey=${JWT_SECRET_KEY}
+        - JwtSettings__expires=${JWT_EXPIRES}
+        - EmailConfiguration__UserName=${EMAIL_USERNAME}
+        - EmailConfiguration__SmtpServer=${EMAIL_SMTP_SERVER}
+        - EmailConfiguration__Port=${EMAIL_PORT}
+        - EmailConfiguration__Password=${EMAIL_PASSWORD}
+        - EmailConfiguration__From=${EMAIL_FROM}
     ports:
         - 8002:8080
         - 8003:8081

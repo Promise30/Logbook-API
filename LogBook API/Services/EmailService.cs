@@ -2,6 +2,7 @@
 using LogBook_API.Services.Abstractions;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.Extensions.Options;
 using MimeKit;
 
 namespace LogBook_API.Services
@@ -11,10 +12,10 @@ namespace LogBook_API.Services
        
         private readonly ILogger<EmailService> _logger;
         private readonly EmailConfiguration _emailConfiguration;
-        public EmailService(ILogger<EmailService> logger, EmailConfiguration emailConfiguration)
+        public EmailService(ILogger<EmailService> logger, IOptions<EmailConfiguration> emailConfiguration)
         {
             _logger = logger;
-            _emailConfiguration = emailConfiguration;
+            _emailConfiguration = emailConfiguration.Value;
         }
       
         public async Task SendEmailAsync(string toEmail, string subject, string body)

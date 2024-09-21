@@ -1,11 +1,13 @@
 ﻿using Hangfire;
 using LogBook_API.Contracts;
 using LogBook_API.Contracts.Auth;
+using LogBook_API.Contracts.Constants;
 using LogBook_API.Contracts.MappingExtensions;
 using LogBook_API.Domain.Entities;
 using LogBook_API.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -23,8 +25,9 @@ namespace LogBook_API.Services
         private readonly IUrlHelper _urlHelper;
         private readonly IEmailService _emailService;
         private readonly IEmailTemplateService _emailTemplateService;
+        private readonly JwtSettings _jwtSettings;
         private User _user;
-        public AuthService(UserManager<User> userManager, IConfiguration configuration, ILogger<AuthService> logger, IHttpContextAccessor httpContextAccessor, IUrlHelper urlHelper, IEmailService emailService, IEmailTemplateService emailTemplateService)
+        public AuthService(UserManager<User> userManager, IConfiguration configuration, ILogger<AuthService> logger, IOptions<JwtSettings> jwtSettings, IHttpContextAccessor httpContextAccessor, IUrlHelper urlHelper, IEmailService emailService, IEmailTemplateService emailTemplateService)
         {
             _userManager = userManager;
             _configuration = configuration;
@@ -33,6 +36,7 @@ namespace LogBook_API.Services
             _urlHelper = urlHelper;
             _emailService = emailService;
             _emailTemplateService = emailTemplateService;
+            _jwtSettings = jwtSettings.Value;
         }
         public async Task<ApiResponse<UserResponseDto>> RegisterUser(UserRegistrationDto userRegistrationDto)
         {
@@ -419,7 +423,7 @@ namespace LogBook_API.Services
         private SigningCredentials GetSigningCredentials()
         {
             var jwtSettings = _configuration.GetSection("JwtSettings");
-            var key = Encoding.UTF8.GetBytes(jwtSettings["secretKey"]);
+            var key = Encoding.UTF8.GetBytes(_jwtSettings.secretKey);
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
@@ -443,10 +447,10 @@ namespace LogBook_API.Services
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var tokenOptions = new JwtSecurityToken
             (
-            issuer: jwtSettings["validIssuer"],
-            audience: jwtSettings["validAudience"],
+            issuer: _jwtSettings.validIssuer,
+            audience: _jwtSettings.validAudience,
             claims: claims,
-            expires: DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings["expires"])),
+            expires: DateTime.Now.AddMinutes(Convert.ToDouble(_jwtSettings.expires)),
             signingCredentials: signingCredentials
             );
             return tokenOptions;
@@ -468,10 +472,10 @@ namespace LogBook_API.Services
                 ValidateAudience = true,
                 ValidateIssuer = true,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["secretKey"])),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.secretKey)),
                 ValidateLifetime = true,
-                ValidIssuer = jwtSettings["validIssuer"],
-                ValidAudience = jwtSettings["validAudience"]
+                ValidIssuer = _jwtSettings.validIssuer,
+                ValidAudience = _jwtSettings.validAudience
             };
             var tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken securityToken;

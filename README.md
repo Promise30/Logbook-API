@@ -12,7 +12,7 @@ LogBook API is a .NET 8-based RESTful API that allows users to manage their acti
 Clone the repository:
    ```
    https://github.com/Promise30/Logbook-API.git
-   cd logbook_api_project
+   cd Logbook-API
    ```
 
 ## Environment Setup
